@@ -1,5 +1,5 @@
 import {useState, useCallback, useMemo, useRef} from 'react';
-import styled from "styled-components";
+import styled from 'styled-components';
 import {useMutation} from "react-query";
 
 import Select from '@paljs/ui/Select';
@@ -8,7 +8,7 @@ import {Button} from '@paljs/ui/Button';
 import Alert from '@paljs/ui/Alert';
 import Spinner from '@paljs/ui/Spinner';
 
-import {ConvertResponse, ErrorResponse, Currency} from "../types";
+import {ConvertResponse, ErrorResponse, Currency} from '../types';
 
 type CalculatorProps = {
     currencies: Array<Currency>;
@@ -47,16 +47,16 @@ const Error = styled(Alert)`
   margin: 0 17.5px 14px;
 `
 
-const convert = ({code, amount}: { code: string, amount: number }) => {
-    return new Promise<ConvertResponse>(async (resolve, reject) => {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/convert?code=${code}&amount=${amount}`);
+const convert = async ({code, amount}: { code: string, amount: number }) => {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/convert?code=${code}&amount=${amount}`);
 
-        if (!response.ok) {
-            return await response.json().then(({error}: ErrorResponse) => reject(error));
-        }
+    if (!response.ok) {
+        const error: ErrorResponse = await response.json();
 
-        return await response.json().then(resolve);
-    })
+        throw error.error;
+    }
+
+    return await response.json() as ConvertResponse;
 }
 
 function Calculator({currencies}: CalculatorProps) {
@@ -152,7 +152,8 @@ function Calculator({currencies}: CalculatorProps) {
                 <>
                     {/* @ts-ignore */}
                     <Result>
-                        {submittedParamsRef.current.amount}&nbsp;CZK is {Math.round(calculate.data.result * 100) / 100}&nbsp;{submittedParamsRef.current.code}
+                        {submittedParamsRef.current.amount}&nbsp;CZK
+                        is {Math.round(calculate.data.result * 100) / 100}&nbsp;{submittedParamsRef.current.code}
                     </Result>
                 </>
             )}

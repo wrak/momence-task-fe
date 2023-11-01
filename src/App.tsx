@@ -1,5 +1,5 @@
 import {ThemeProvider} from 'styled-components';
-import {QueryClientProvider, QueryClient} from "react-query";
+import {QueryClientProvider, QueryClient} from 'react-query';
 import {LayoutContainer, LayoutContent, LayoutColumns, LayoutColumn, Layout} from '@paljs/ui/Layout';
 import {createTheme} from '@paljs/theme';
 
@@ -38,7 +38,7 @@ function App() {
                         <LayoutContent>
                             <LayoutColumns>
                                 <LayoutColumn>
-                                    <ConversionPage />
+                                    <ConversionPage/>
                                 </LayoutColumn>
                             </LayoutColumns>
                         </LayoutContent>

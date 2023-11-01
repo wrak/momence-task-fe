@@ -1,10 +1,16 @@
-import type {Currency} from '../types';
+import styled from 'styled-components';
+
 import {Card, CardBody, CardHeader} from '@paljs/ui/Card';
-import {Table} from './Table';
+
+import type {Currency} from '../types';
 
 type CurrenciesTableProps = {
     currencies: Array<Currency>;
 };
+
+const Table = styled.table`
+  width: 100%;
+`;
 
 function CurrenciesTable({currencies}: CurrenciesTableProps) {
     return (
