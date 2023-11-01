@@ -1,4 +1,4 @@
-import {useState, useCallback, useMemo} from 'react';
+import {useState, useCallback, useMemo, useRef} from 'react';
 import styled from "styled-components";
 import {useMutation} from "react-query";
 
@@ -62,6 +62,11 @@ const convert = ({code, amount}: { code: string, amount: number }) => {
 function Calculator({currencies}: CalculatorProps) {
     const [amount, setAmount] = useState<number>();
     const [code, setCode] = useState<string>();
+    const submittedParamsRef = useRef({
+        amount,
+        code,
+    });
+
     const isValid = amount != null && code != null;
 
     const calculate = useMutation({
@@ -94,8 +99,12 @@ function Calculator({currencies}: CalculatorProps) {
             return;
         }
 
+        submittedParamsRef.current = {
+            amount,
+            code,
+        }
         calculate.mutate({amount, code});
-    }, [calculate, isValid])
+    }, [calculate, isValid, code, amount, submittedParamsRef])
 
     const options = useMemo(
         () => currencies.map(({code, country}) => ({
@@ -143,7 +152,7 @@ function Calculator({currencies}: CalculatorProps) {
                 <>
                     {/* @ts-ignore */}
                     <Result>
-                        {amount}&nbsp;CZK is {Math.round(calculate.data.result * 100) / 100}&nbsp;{code}
+                        {submittedParamsRef.current.amount}&nbsp;CZK is {Math.round(calculate.data.result * 100) / 100}&nbsp;{submittedParamsRef.current.code}
                     </Result>
                 </>
             )}
