@@ -143,14 +143,14 @@ function Calculator({currencies}: CalculatorProps) {
 
             {calculate.isError && (
                 <>
-                    {/* @ts-ignore */}
+                    {/* @ts-ignore Because selected design system library has poorly typed some components which doesn't allow children prop */}
                     <Error status="Danger">{calculate.error}</Error>
                 </>
             )}
 
             {calculate.isSuccess && (
                 <>
-                    {/* @ts-ignore */}
+                    {/* @ts-ignore Because selected design system library has poorly typed some components which doesn't allow children prop */}
                     <Result>
                         {submittedParamsRef.current.amount}&nbsp;CZK
                         is {Math.round(calculate.data.result * 100) / 100}&nbsp;{submittedParamsRef.current.code}

@@ -25,7 +25,7 @@ function CurrenciesTable({currencies}: CurrenciesTableProps) {
                             <tr key={currency.code}>
                                 <td>{currency.country}</td>
                                 <td>{currency.code}</td>
-                                <td align="right">{currency.rate}&nbsp;CZK</td>
+                                <td align="right">{Math.round(currency.rate * 1000) / 1000}&nbsp;CZK</td>
                             </tr>
                         ))}
                         </tbody>

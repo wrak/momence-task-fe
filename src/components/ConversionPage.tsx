@@ -27,7 +27,7 @@ function ConversionPage() {
     if (isError) {
         return (
             <>
-                {/* @ts-ignore */}
+                {/* @ts-ignore Because selected design system library has poorly typed some components which doesn't allow children prop */}
                 <Alert status="Danger">
                     {error}
                 </Alert>

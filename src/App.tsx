@@ -32,7 +32,7 @@ function App() {
         <QueryClientProvider client={queryClient}>
             <ThemeProvider theme={createTheme('default', theme)}>
                 <GlobalStyle/>
-                {/* @ts-ignore */}
+                {/* @ts-ignore Because selected design system library has poorly typed some components which doesn't allow children prop */}
                 <Layout>
                     <LayoutContainer>
                         <LayoutContent>
