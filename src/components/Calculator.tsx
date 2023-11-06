@@ -68,7 +68,7 @@ function Calculator({currencies}: CalculatorProps) {
 
     const handleAmountChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const normalizedAmount = Number(e.target.value);
-        if (Number.isNaN(normalizedAmount)) {
+        if (Number.isNaN(normalizedAmount) || e.target.value === '') {
             setAmount(undefined);
 
             return;
@@ -111,6 +111,8 @@ function Calculator({currencies}: CalculatorProps) {
 
     const selectValue = options.find(({value}) => value === code);
 
+    console.log(amount)
+
     return (
         <Container>
             <form onSubmit={handleSubmit}>
@@ -121,7 +123,7 @@ function Calculator({currencies}: CalculatorProps) {
                                 type="number"
                                 placeholder="Amount in CZK"
                                 value={amount}
-                                step="any"
+                                step="0.001"
                                 onChange={handleAmountChange}
                             />
                         </InputGroup>
