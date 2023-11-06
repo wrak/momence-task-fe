@@ -6,25 +6,16 @@ import Spinner from '@paljs/ui/Spinner';
 import CurrenciesTable from './CurrenciesTable.tsx';
 import Calculator from './Calculator.tsx';
 
-import type {CurrenciesResponse, ErrorResponse} from "../types";
+import type {CurrenciesResponse} from '../types';
+import {handleResponse} from '../utils';
 
-const getCurrencies = async () => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/currencies`);
-
-    if (!response.ok) {
-        const error: ErrorResponse = await response.json();
-
-        throw error.error;
-    }
-
-    return await response.json() as CurrenciesResponse;
+const getCurrencies = () => {
+    return handleResponse<CurrenciesResponse>(() => fetch(`${import.meta.env.VITE_API_URL}/currencies`));
 }
 
 
 function ConversionPage() {
-    const {isFetching, isError, data, error} = useQuery({queryKey: ['currencies'], queryFn: getCurrencies});
-
-    console.log(isFetching, data);
+    const {isError, data, error} = useQuery({queryKey: ['currencies'], queryFn: getCurrencies});
 
     if (isError) {
         return (

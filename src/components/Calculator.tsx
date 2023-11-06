@@ -8,7 +8,8 @@ import {Button} from '@paljs/ui/Button';
 import Alert from '@paljs/ui/Alert';
 import Spinner from '@paljs/ui/Spinner';
 
-import {ConvertResponse, ErrorResponse, Currency} from '../types';
+import {ConvertResponse, Currency} from '../types';
+import {handleResponse} from '../utils';
 
 type CalculatorProps = {
     currencies: Array<Currency>;
@@ -48,15 +49,7 @@ const Error = styled(Alert)`
 `
 
 const convert = async ({code, amount}: { code: string, amount: number }) => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/convert?code=${code}&amount=${amount}`);
-
-    if (!response.ok) {
-        const error: ErrorResponse = await response.json();
-
-        throw error.error;
-    }
-
-    return await response.json() as ConvertResponse;
+    return handleResponse<ConvertResponse>(() => fetch(`${import.meta.env.VITE_API_URL}/convert?code=${code}&amount=${amount}`));
 }
 
 function Calculator({currencies}: CalculatorProps) {
@@ -94,7 +87,9 @@ function Calculator({currencies}: CalculatorProps) {
         setCode(selectedOption.value);
     }, []);
 
-    const handleButtonClick = useCallback(() => {
+    const handleSubmit = useCallback((e: React.SyntheticEvent) => {
+        e.preventDefault();
+
         if (!isValid) {
             return;
         }
@@ -118,28 +113,30 @@ function Calculator({currencies}: CalculatorProps) {
 
     return (
         <Container>
-            <Row>
-                <InputContainer>
-                    <InputGroup>
-                        <input
-                            type="number"
-                            placeholder="Amount in CZK"
-                            value={amount}
-                            step="any"
-                            onChange={handleAmountChange}
-                        />
-                    </InputGroup>
-                </InputContainer>
+            <form onSubmit={handleSubmit}>
+                <Row>
+                    <InputContainer>
+                        <InputGroup>
+                            <input
+                                type="number"
+                                placeholder="Amount in CZK"
+                                value={amount}
+                                step="any"
+                                onChange={handleAmountChange}
+                            />
+                        </InputGroup>
+                    </InputContainer>
 
-                <SelectContainer>
-                    <Select options={options} placeholder="Code" value={selectValue} onChange={handleCodeChange}/>
-                </SelectContainer>
+                    <SelectContainer>
+                        <Select options={options} placeholder="Code" value={selectValue} onChange={handleCodeChange}/>
+                    </SelectContainer>
 
-                <Button style={{position: 'relative'}} fullWidth disabled={!isValid} onClick={handleButtonClick}>
-                    Convert
-                    {calculate.isLoading && <Spinner/>}
-                </Button>
-            </Row>
+                    <Button style={{position: 'relative'}} disabled={!isValid} type="submit">
+                        Convert
+                        {calculate.isLoading && <Spinner/>}
+                    </Button>
+                </Row>
+            </form>
 
             {calculate.isError && (
                 <>
