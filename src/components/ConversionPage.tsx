@@ -24,6 +24,8 @@ const getCurrencies = async () => {
 function ConversionPage() {
     const {isFetching, isError, data, error} = useQuery({queryKey: ['currencies'], queryFn: getCurrencies});
 
+    console.log(isFetching, data);
+
     if (isError) {
         return (
             <>
@@ -35,7 +37,7 @@ function ConversionPage() {
         )
     }
 
-    if (isFetching || !data) {
+    if (!data) {
         return (
             <Spinner/>
         )
