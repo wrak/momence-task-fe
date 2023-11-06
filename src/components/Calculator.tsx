@@ -111,8 +111,6 @@ function Calculator({currencies}: CalculatorProps) {
 
     const selectValue = options.find(({value}) => value === code);
 
-    console.log(amount)
-
     return (
         <Container>
             <form onSubmit={handleSubmit}>
